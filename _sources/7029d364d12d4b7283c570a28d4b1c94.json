@@ -1,0 +1,86 @@
+{
+  "header": {
+    "Accept-Language": "zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    "Origin": "http://www.aixiashu.info",
+    "Connection": "keep-alive",
+    "Cache-Control": "max-age=0",
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  "cookie": {},
+  "ruleSearch": {
+    "header": {},
+    "params": {
+      "searchtype": "articlename",
+      "searchkey": "{keyword}"
+    },
+    "mode": "http",
+    "url": "http://www.aixiashu.info/modules/article/search.php",
+    "method": "GET",
+    "engine": "xpath",
+    "request": "",
+    "requestEncode": "",
+    "response": "",
+    "responseEncode": "",
+    "bookList": "//table[@class=\"grid\"]/tr[position()>1]",
+    "bookName": "//td[1]/a/text()",
+    "bookUrl": "//td[1]/a/@href",
+    "bookAuthor": "//td[3]/text()",
+    "ruleExtra": {
+      "bookSize": "//td[4]/text()",
+      "classify": "",
+      "coverUrl": "//td[1]/a/@href <js>value = value.replace(/(\\d+)\\/(\\d+)\\//, \"files/article/image/$1/$2/$2s.jpg\"); return value;</js>",
+      "introduce": "",
+      "lastChapterName": "//td[2]/a/text()",
+      "lastUpdateTime": "//td[5]/text()",
+      "status": "//td[6]/text()"
+    }
+  },
+  "ruleChapter": {
+    "header": {},
+    "params": {},
+    "mode": "",
+    "chapterList": "//div[@id=\"list\"]/dl/dd[position() >= 10]",
+    "chapterName": "./a/text()",
+    "chapterUrl": "./a/@href",
+    "engine": "xpath",
+    "method": "GET",
+    "request": "",
+    "requestEncode": "",
+    "response": "",
+    "next": "",
+    "responseEncode": "",
+    "ruleExtra": {
+      "bookSize": "",
+      "classify": "//div[@class=\"con_top\"]/a[2]/text()",
+      "coverUrl": "",
+      "introduce": "//*[@id=\"intro\"]/p/text()",
+      "lastChapterName": "",
+      "lastUpdateTime": "",
+      "status": ""
+    }
+  },
+  "ruleContent": {
+    "header": {},
+    "params": {},
+    "mode": "",
+    "engine": "xpath",
+    "method": "GET",
+    "next": "",
+    "contents": "//div[@id=\"content\"]/text()",
+    "request": "@js: config['chapterUrl'] = config.chapterUrl.replace('.html', '').concat('_${i}.html'); config['pageStart'] = 2; return config;",
+    "requestEncode": "",
+    "response": "",
+    "responseEncode": "",
+    "cleaner": "最新网址：www.aixiashu.info|(看完记得收藏书签方便下次阅读!)|免费阅读.|《我有一身被动技》爱下书小说网全文字更新,牢记网址:www.aixiashu.info|正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！|(看完记得收藏书|签方便下次阅读!)|www.aixiashu.info"
+  },
+  "version": 1,
+  "siteName": "爱下小说网",
+  "host": "http://www.aixiashu.info",
+  "author": "可乐",
+  "contact": "",
+  "sourceUrl": "",
+  "remarks": "",
+  "update": ""
+}

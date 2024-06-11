@@ -1,0 +1,79 @@
+{
+  "header": {},
+  "cookie": {},
+  "ruleSearch": {
+    "header": {
+      "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36"
+    },
+    "params": {
+      "q": "{keyword}"
+    },
+    "mode": "http",
+    "url": "http://m.xinbqg.la/s.php",
+    "method": "GET",
+    "engine": "xpath",
+    "request": "",
+    "requestEncode": "utf-8",
+    "response": "",
+    "responseEncode": "utf-8",
+    "bookList": "//div[@class=\"block so_list\"]/div[@class=\"bookbox\"]",
+    "bookName": "./div[@class=\"bookinfo\"]/h4/a/text()",
+    "bookUrl": "./div[@class=\"bookinfo\"]/h4/a/@href",
+    "bookAuthor": "./div[@class=\"bookinfo\"]/div[@class=\"author\"]/text()",
+    "ruleExtra": {
+      "bookSize": "",
+      "classify": "./div[@class=\"bookinfo\"]/div[@class=\"cat\"]/text()",
+      "coverUrl": "./div[@class=\"bookimg\"]/a/img/@src",
+      "introduce": "",
+      "lastChapterName": "./div[@class=\"bookinfo\"]/div[@class=\"update\"]/a/text()",
+      "lastUpdateTime": "",
+      "status": ""
+    }
+  },
+  "ruleChapter": {
+    "header": {},
+    "params": {},
+    "mode": "http",
+    "chapterList": "//div[@class=\"book_last\"]/dl/dd",
+    "chapterName": "./a/text()",
+    "chapterUrl": "./a/@href",
+    "engine": "xpath",
+    "method": "GET",
+    "request": "",
+    "requestEncode": "utf-8",
+    "response": "",
+    "next": "//div[@class=\"book_more\"]/a/@href",
+    "responseEncode": "utf-8",
+    "ruleExtra": {
+      "bookSize": "",
+      "classify": "",
+      "coverUrl": "",
+      "introduce": "",
+      "lastChapterName": "",
+      "lastUpdateTime": "",
+      "status": ""
+    }
+  },
+  "ruleContent": {
+    "header": {},
+    "params": {},
+    "mode": "http",
+    "engine": "xpath",
+    "method": "GET",
+    "next": "//p[@class=\"Readpage\"]/a[@id=\"pb_next\" and contains(text(),'下ー页')]/@href",
+    "contents": "//div[@id=\"chaptercontent\"]/text()",
+    "request": "",
+    "requestEncode": "utf-8",
+    "response": "",
+    "responseEncode": "utf-8",
+    "cleaner": "最新网址：www.xinbqg.la|(看完记得收藏书签方便下次阅读!)|免费阅读.|《我有一身被动技》新百强小说全文字更新,牢记网址:www.xinbqg.la|正在手打中，请稍等片刻，内容更新后，请重新刷新页面，即可获取最新更新！|(看完记得收藏书|签方便下次阅读!)|www.xinbqg.la"
+  },
+  "version": 1,
+  "siteName": "新百强网m",
+  "host": "http://m.xinbqg.la",
+  "author": "可乐",
+  "contact": "",
+  "sourceUrl": "",
+  "remarks": "",
+  "update": ""
+}
