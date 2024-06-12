@@ -142,7 +142,8 @@
 
 <script src="https://www.hive-net.cn/Assets/Christmas/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
 <script>
-    let link = "http://127.0.0.1:8000";
+    let link = `${window.location.protocol}//${window.location.hostname}`;
+    if (window.location.port !== '') link += `:${window.location.port}`;
     let chapters = null;
     let loading = false;
 
