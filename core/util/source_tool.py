@@ -19,7 +19,9 @@ async def load_source_config() -> Dict[str, SourceSummary]:
         def sort_by_priority(x): return source_config_dict[x].get("priority", 0)
 
         for source_id in sorted(source_config_dict, key=sort_by_priority, reverse=True):
-            source_config[source_id] = SourceSummary(**source_config_dict[source_id])
+            config = source_config_dict[source_id]
+            if config.get("enable", True):
+                source_config[source_id] = SourceSummary(**config)
         return source_config
 
 

@@ -10,14 +10,18 @@ from core.parser import ParserFactory
 from core.util.source_tool import get_source
 
 
-def parse_content(text, source) -> str:
+def parse_content(text: str, source: dict) -> str:
+    if not text or not source:
+        return str()
     doc = etree.HTML(text)
     parser = ParserFactory.get_parser("xpath")
     contents = parser.contents(doc, source.get("contents"))
     return "\n".join(contents)
 
 
-def parse_next_url(text, source) -> str:
+def parse_next_url(text: str, source: dict) -> str:
+    if not text or not source:
+        return str()
     doc = etree.HTML(text)
     parser = ParserFactory.get_parser("xpath")
     return parser.next_page(doc, source.get("next"))

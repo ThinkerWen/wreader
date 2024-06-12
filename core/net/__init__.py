@@ -20,7 +20,7 @@ class SingletonClient:
 
     @staticmethod
     async def _create_client():
-        return aiohttp.ClientSession()
+        return aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=15))
 
     @classmethod
     def _signal_handler(cls, signum, frame):

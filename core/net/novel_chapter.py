@@ -11,6 +11,8 @@ from core.util.source_tool import get_source
 
 
 def parse_chapter(text: str, source: dict) -> list[Chapter]:
+    if not text or not source:
+        return list()
     result = list()
     doc = etree.HTML(text)
     parser = ParserFactory.get_parser("xpath")
@@ -24,6 +26,8 @@ def parse_chapter(text: str, source: dict) -> list[Chapter]:
 
 
 def parse_extra(text: str, source: dict) -> dict:
+    if not text or not source:
+        return dict()
     book = dict()
     doc = etree.HTML(text)
     parser = ParserFactory.get_parser("xpath")

@@ -4,15 +4,18 @@ d136f94e1d144e3f81c6223d82951f76:
   source_author: "可乐"
   source_index: http://www.xinbqg.la
   priority: 2
+  enable: true
 0eb6f136f259431a84226ba9c935d07a:
   source_id: 0eb6f136f259431a84226ba9c935d07a
   source_name: "新百强网m"
   source_author: "可乐"
   source_index: http://m.xinbqg.la
   priority: 1
+  enable: false
 7029d364d12d4b7283c570a28d4b1c94:
   source_id: 7029d364d12d4b7283c570a28d4b1c94
   source_name: "爱下小说网"
   source_author: "可乐"
   source_index: http://www.aixiashu.info
   priority: 0
+  enable: false

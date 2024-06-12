@@ -1,4 +1,3 @@
-import logging
 from urllib.parse import urljoin
 
 from lxml import etree
@@ -11,6 +10,8 @@ from core.util.source_tool import get_sources
 
 
 def parse_novel_list(text: str, source: dict) -> list[dict]:
+    if not text or not source:
+        return list()
     result = list()
     doc = etree.HTML(text)
     extra = source.get("ruleExtra")

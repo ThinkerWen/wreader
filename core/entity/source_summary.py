@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class SourceSummary(BaseModel):
+    enable: bool
     source_id: str
     source_name: str
     priority: Optional[int] = 0
