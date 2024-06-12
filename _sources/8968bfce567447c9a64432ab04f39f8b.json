@@ -1,0 +1,78 @@
+{
+  "header": {},
+  "cookie": {},
+  "ruleSearch": {
+    "header": {},
+    "params": {
+      "s": "{keyword}",
+      "searchtype": "articlename"
+    },
+    "mode": "http",
+    "url": "http://www.xuanyge.info/modules/article/search.php",
+    "method": "GET",
+    "engine": "xpath",
+    "request": "",
+    "requestEncode": "utf-8",
+    "response": "",
+    "responseEncode": "utf-8",
+    "bookList": "//div[@id='sitebox']/dl",
+    "bookName": ".//h3/a/text()",
+    "bookUrl": ".//h3/a/@href",
+    "bookAuthor": ".//dd[2]/span[1]/text()",
+    "ruleExtra": {
+      "bookSize": ".//dd[2]/span[3]/text()",
+      "classify": "",
+      "coverUrl": ".//a[1]/img/@src",
+      "introduce": "//*[@class=\"book_des\"]",
+      "lastChapterName": ".//dd[3]/a/text()",
+      "lastUpdateTime": "",
+      "status": ".//dd[2]/span[2]/text()"
+    }
+  },
+  "ruleChapter": {
+    "header": {},
+    "params": {},
+    "mode": "http",
+    "chapterList": "//div[@id='readerlist']/ul/li",
+    "chapterName": ".//a/text()",
+    "chapterUrl": ".//a/@href<js>value=config.bookUrl.concat(value);return value;</js>",
+    "engine": "xpath",
+    "method": "GET",
+    "request": "",
+    "requestEncode": "utf-8",
+    "response": "",
+    "next": "",
+    "responseEncode": "utf-8",
+    "ruleExtra": {
+      "bookSize": "",
+      "classify": "//*[@id=\"count\"]/span[2]",
+      "coverUrl": "",
+      "introduce": "//*[@id=\"bookintro\"]/p[1]",
+      "lastChapterName": "",
+      "lastUpdateTime": "//*[@id=\"count\"]/span[4]",
+      "status": ""
+    }
+  },
+  "ruleContent": {
+    "header": {},
+    "params": {},
+    "mode": "http",
+    "engine": "xpath",
+    "method": "GET",
+    "next": "",
+    "contents": "//div[@id='content']/text()",
+    "request": "",
+    "requestEncode": "utf-8",
+    "response": "",
+    "responseEncode": "utf-8",
+    "cleaner": "随机推荐：||</br>"
+  },
+  "version": 1,
+  "siteName": "玄幻阁",
+  "host": "http://www.xuanyge.info/",
+  "author": "可乐",
+  "contact": "",
+  "sourceUrl": "",
+  "remarks": "",
+  "update": ""
+}

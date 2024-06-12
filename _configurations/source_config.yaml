@@ -1,10 +1,17 @@
+8968bfce567447c9a64432ab04f39f8b:
+  source_id: 8968bfce567447c9a64432ab04f39f8b
+  source_name: "玄幻阁"
+  source_author: "可乐"
+  source_index: http://www.xuanyge.info/
+  priority: 3
+  enable: true
 d136f94e1d144e3f81c6223d82951f76:
   source_id: d136f94e1d144e3f81c6223d82951f76
   source_name: "新百强网"
   source_author: "可乐"
   source_index: http://www.xinbqg.la
   priority: 2
-  enable: true
+  enable: false
 0eb6f136f259431a84226ba9c935d07a:
   source_id: 0eb6f136f259431a84226ba9c935d07a
   source_name: "新百强网m"
