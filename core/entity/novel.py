@@ -18,8 +18,10 @@ class Novel(BaseModel):
 
     def __setattr__(self, name, value):
         hints = get_type_hints(self.__class__)
-        if name in hints and hints[name] == Optional[str] and value:
-            super().__setattr__(name, value)
+        hint = hints.get(name)
+        if hint == Optional[str]:
+            if value is not None and isinstance(value, str) and value:
+                super().__setattr__(name, value)
         else:
             super().__setattr__(name, value)
 

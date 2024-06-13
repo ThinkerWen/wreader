@@ -7,6 +7,7 @@
       "s": "{keyword}",
       "searchtype": "articlename"
     },
+    "cookie": {},
     "mode": "http",
     "url": "http://www.xuanyge.info/modules/article/search.php",
     "method": "GET",
@@ -32,6 +33,7 @@
   "ruleChapter": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "http",
     "chapterList": "//div[@id='readerlist']/ul/li",
     "chapterName": ".//a/text()",
@@ -56,6 +58,7 @@
   "ruleContent": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "http",
     "engine": "xpath",
     "method": "GET",

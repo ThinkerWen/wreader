@@ -5,7 +5,7 @@ from lxml import etree
 from core.entity.novel import Novel
 from core.net import SingletonClient
 from core.parser import ParserFactory
-from core.util.keyword_tool import replace_params
+from core.util.net_tool import get_request_params
 from core.util.source_tool import get_sources
 
 
@@ -37,17 +37,13 @@ async def search_novel(keyword: str, source_ids: list[str]) -> list[Novel]:
     sources = await get_sources(source_ids)
     for source_id in sources:
         source = sources[source_id]
-        source = source.get("ruleSearch")
-        url = source.get("url")
-        method = source.get("method")
-        params = replace_params(source.get("params"), keyword)
         client = await SingletonClient.get_instance()
-        async with client.request(method=method, url=url, params=params, headers=source.get("header")) as response:
+        async with client.request(**get_request_params(source, "search", keyword=keyword)) as response:
             text = await response.text()
-            for book in parse_novel_list(text, source):
+            for book in parse_novel_list(text, source.get("ruleSearch")):
                 novel_list.append(Novel(
                     name=book.get("bookName"),
-                    url=urljoin(url, book.get("bookUrl")),
+                    url=urljoin(source.get("ruleSearch").get("url"), book.get("bookUrl")),
                     source_id=source_id,
                     author=book.get("bookAuthor"),
                     cover_url=book.get("coverUrl"),

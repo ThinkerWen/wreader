@@ -7,6 +7,7 @@ from core.entity.chapter import Chapter
 from core.entity.novel import Novel
 from core.net import SingletonClient
 from core.parser import ParserFactory
+from core.util.net_tool import get_request_params
 from core.util.source_tool import get_source
 
 
@@ -52,14 +53,13 @@ async def fetch_chapter(novel: Novel, page: Union[str | None] = None) -> dict:
     chapter_list = list()
     client = await SingletonClient.get_instance()
     source = await get_source(novel.source_id)
-    source = source.get("ruleChapter")
     url = page if page else novel.url
-    async with client.request(method=source.get("method"), url=url) as response:
+    async with client.request(**get_request_params(source, "chapter", url=url)) as response:
         text = await response.text()
-        for chapter in parse_chapter(text, source):
+        for chapter in parse_chapter(text, source.get("ruleChapter")):
             chapter.url = urljoin(novel.url, chapter.url)
             chapter_list.append(chapter)
-        extra = parse_extra(text, source)
+        extra = parse_extra(text, source.get("ruleChapter"))
         novel.size = extra.get("bookSize")
         novel.classify = extra.get("classify")
         novel.cover_url = extra.get("coverUrl")
@@ -68,7 +68,7 @@ async def fetch_chapter(novel: Novel, page: Union[str | None] = None) -> dict:
         novel.last_update_time = extra.get("lastUpdateTime")
         novel.status = extra.get("status")
     await SingletonClient.close_client()
-    next_page = parse_next_url(text, source)
+    next_page = parse_next_url(text, source.get("ruleChapter"))
     return {
         "chapter_list": chapter_list,
         "next_page": urljoin(chapter.url, next_page) if next_page else str(),

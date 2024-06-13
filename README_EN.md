@@ -1,5 +1,5 @@
 # WReader
-**[Chinese](https://github.com/ThinkerWen/wreader/blob/main/README.md)**
+**[中文](https://github.com/ThinkerWen/wreader/blob/main/README.md)**
 
 Online Experience：[wreader.onrender.com](https://wreader.onrender.com/)
 ## Introduction

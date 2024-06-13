@@ -15,6 +15,7 @@
       "searchtype": "articlename",
       "searchkey": "{keyword}"
     },
+    "cookie": {},
     "mode": "http",
     "url": "http://www.aixiashu.info/modules/article/search.php",
     "method": "GET",
@@ -40,6 +41,7 @@
   "ruleChapter": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "",
     "chapterList": "//div[@id=\"list\"]/dl/dd[position() >= 10]",
     "chapterName": "./a/text()",
@@ -64,6 +66,7 @@
   "ruleContent": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "",
     "engine": "xpath",
     "method": "GET",

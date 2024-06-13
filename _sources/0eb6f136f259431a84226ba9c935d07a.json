@@ -8,6 +8,7 @@
     "params": {
       "q": "{keyword}"
     },
+    "cookie": {},
     "mode": "http",
     "url": "http://m.xinbqg.la/s.php",
     "method": "GET",
@@ -33,6 +34,7 @@
   "ruleChapter": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "http",
     "chapterList": "//div[@class=\"book_last\"]/dl/dd",
     "chapterName": "./a/text()",
@@ -57,6 +59,7 @@
   "ruleContent": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "http",
     "engine": "xpath",
     "method": "GET",

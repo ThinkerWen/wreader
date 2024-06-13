@@ -9,6 +9,7 @@
       "s": "0000",
       "q": "{keyword}"
     },
+    "cookie": {},
     "mode": "http",
     "url": "http://www.xinbqg.la/modules/article/search.php",
     "method": "GET",
@@ -34,6 +35,7 @@
   "ruleChapter": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "http",
     "chapterList": "//dl/dd",
     "chapterName": "./a/text()",
@@ -58,6 +60,7 @@
   "ruleContent": {
     "header": {},
     "params": {},
+    "cookie": {},
     "mode": "http",
     "engine": "xpath",
     "method": "GET",
