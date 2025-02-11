@@ -14,9 +14,8 @@ router = APIRouter()
 
 @router.get("/search", response_model=List[Novel])
 async def api_search(keyword: str, source_id: Union[str | None] = None) -> List[Novel]:
-    if source_id:
-        return await search_novel(keyword, [source_id])
-    return await search_novel(keyword, [x for x in settings.SOURCE_CONFIG])
+    sources = [source_id] if source_id else [x for x in settings.SOURCE_CONFIG]
+    return await search_novel(keyword, sources)
 
 
 @router.post("/chapter")
