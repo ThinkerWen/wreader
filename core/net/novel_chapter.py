@@ -57,6 +57,7 @@ async def fetch_chapter(novel: Novel, page: Union[str | None] = None) -> dict:
     async with client.request(**get_request_params(source, "chapter", url=url)) as response:
         text = await response.text()
         for chapter in parse_chapter(text, source.get("ruleChapter")):
+            if not chapter.url: continue
             chapter.url = urljoin(novel.url, chapter.url)
             chapter_list.append(chapter)
         extra = parse_extra(text, source.get("ruleChapter"))
