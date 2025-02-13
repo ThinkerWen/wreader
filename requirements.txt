@@ -11,7 +11,7 @@ cssselect==1.2.0
 dnspython==2.6.1
 email_validator==2.1.1
 exceptiongroup==1.2.1
-fastapi==0.111.0
+fastapi==0.115.8
 fastapi-cli==0.0.4
 frozenlist==1.4.1
 h11==0.14.0
