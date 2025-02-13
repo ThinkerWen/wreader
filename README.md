@@ -22,5 +22,7 @@ docker run -d --name wreader -p 8001:8001 ThinkerWen/wreader
 ```
 浏览器打开 `http://127.0.0.1:8000`即可搜索阅读小说
 
-## 其他
+## 前端
+前端100%使用[Cursor](https://www.cursor.com/)制作：[wreader-web](https://github.com/ThinkerWen/wreader-web)
+
 不擅前端，感谢大家多多贡献PR

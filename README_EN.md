@@ -23,4 +23,7 @@ docker run -d --name wreader -p 8001:8001 ThinkerWen/wreader
 Open `http://127.0.0.1:8000` in your browser to search and read novels
 
 ## Other
+The front-end is 100% made with [Cursor](https://www.cursor.com)</br>
+The front-end project: [wreader-web](https://github.comThinkerWenwreader-web)
+
 Not good at front-end, thank you all for your PR contributions
