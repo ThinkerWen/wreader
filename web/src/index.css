@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+:root { font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; color: #272b25; background: #f8f9f6; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased }
+* { box-sizing: border-box }
+body { margin: 0; min-width: 320px }
+button { cursor: pointer }
+button:disabled { cursor: not-allowed }
+.app-shell { min-height: 100vh; display: flex }
+.app-shell .button--primary { background: #2f5749; color: #fff; border-color: #2f5749; border-radius: 10px; font-weight: 600 }
+.app-shell .button--secondary { background: #f3e9d6; color: #324036; border-radius: 9px; font-weight: 600 }
+.app-shell .button--outline { border-color: #d6dcd4; color: #344b3c; border-radius: 10px }
+.app-shell .button--ghost { color: inherit }
+.sidebar { width: 252px; flex: 0 0 252px; background: #183b32; color: #eaf0e8; min-height: 100vh; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 32px 16px 23px; z-index: 30 }
+.brand { display: flex; gap: 13px; align-items: center; padding: 0 17px; cursor: pointer; margin-bottom: 67px }
+.brand-icon { width: 40px; height: 40px; display: grid; place-items: center; background: #e6c695; color: #173b32; border-radius: 12px }
+.brand strong { display: block; font-family: Georgia, 'Songti SC', serif; font-size: 22px; letter-spacing: .17em; line-height: 1.1 }
+.brand small { display: block; margin-top: 6px; font-size: 9px; letter-spacing: .22em; color: #a8bcb0 }
+.sidebar-label { padding: 0 17px; color: #8ba79b; font-size: 11px; letter-spacing: .13em; margin-bottom: 16px }
+.sidebar nav { display: grid; gap: 5px }
+.nav-item { display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px 17px; background: transparent; color: #b5c9be; border: 0; border-radius: 10px; font-size: 14px; text-align: left; transition: background .2s, color .2s }
+.nav-item:hover, .nav-item.active { background: #31584a; color: #fff }
+.nav-item span { margin-left: auto; color: #e9cca1; font-size: 12px }
+.sidebar-spacer { flex: 1 }
+.sidebar-quote { margin: 0 12px 31px; padding: 23px 19px 20px; border: 1px solid #456356; border-radius: 11px; background: #244639 }
+.sidebar-quote > span { color: #dbbb8c; font: 38px/.7 Georgia, serif }
+.sidebar-quote p { font: 17px/1.9 Georgia, 'Songti SC', serif; letter-spacing: .07em; margin: 4px 0 19px }
+.quote-rule { width: 24px; height: 1px; background: #adad85; margin-bottom: 11px }
+.sidebar-quote small { color: #a6b7a8; font-size: 10px; letter-spacing: .12em }
+.sidebar-footer { padding: 0 17px; color: #91a99a; font-size: 11px; display: flex; align-items: center; gap: 9px }
+.status-dot, .pulse-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; background: #9fc59a }
+.main-content { flex: 1; min-width: 0; display: flex; flex-direction: column }
+.topbar { height: 75px; border-bottom: 1px solid #e9ece6; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 58px; color: #8e998f; font-size: 12px }
+.breadcrumbs { display: flex; align-items: center; gap: 10px }
+.breadcrumbs strong { font-weight: 600; color: #2c3e32 }
+.topbar-right { display: flex; align-items: center; gap: 22px }
+.user-mark { width: 35px; height: 35px; display: grid; place-items: center; border-radius: 50%; background: #f1f4ec; color: #375a48 }
+.menu-button { display: none !important }
+.page-content { width: min(100%, 1240px); padding: 53px 58px 100px; margin: 0 auto; flex: 1 }
+.page-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 25px; margin-bottom: 33px }
+.eyebrow, .section-kicker { font-size: 10px; font-weight: 700; letter-spacing: .2em; color: #718d77 }
+.eyebrow { display: flex; align-items: center; gap: 16px }
+.eyebrow-line { display: inline-block; width: 25px; height: 1px; background: #aebead }
+.page-heading h1, .detail-info h1 { font-family: Georgia, 'Songti SC', 'Noto Serif CJK SC', serif; font-weight: 600; letter-spacing: -.035em; font-size: clamp(34px, 4vw, 46px); margin: 11px 0 7px }
+.heading-dot { color: #b58354 }
+.page-heading p { font-size: 14px; color: #8a958b; margin: 0 }
+.feature-banner { background: #245342; color: #fff; border-radius: 17px; height: 290px; padding: 34px 48px; display: flex; position: relative; overflow: hidden }
+.feature-banner::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 85% 50%, #47766380, transparent 40%) }
+.feature-copy { position: relative; z-index: 2; width: 65% }
+.feature-tag { color: #d3dfcc; display: flex; align-items: center; gap: 9px; font-size: 11px; letter-spacing: .13em }
+.feature-copy h2 { font: 600 clamp(22px, 3vw, 32px)/1.48 Georgia, 'Songti SC', serif; letter-spacing: .04em; margin: 16px 0 8px }
+.feature-copy h2 em { color: #ecc99b; font-style: normal }
+.feature-copy p { color: #bfd1c5; font-size: 12px; margin: 0 0 21px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis }
+.feature-art { position: absolute; right: 9%; bottom: -14px; width: 270px; height: 290px; z-index: 1 }
+.art-circle { width: 282px; height: 282px; border: 1px solid #b7cbb440; border-radius: 50%; position: absolute; top: 24px; left: 15px }
+.art-book { position: absolute; bottom: 0; width: 165px; height: 215px; border-radius: 3px 9px 5px 3px; box-shadow: 12px 10px 26px #0d292c80 }
+.art-book-back { background: #b6a281; transform: rotate(14deg); left: 85px; bottom: 14px }
+.art-book-front { background: #dbc5a1; transform: rotate(-12deg); left: 53px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #557264; gap: 14px; border-left: 9px solid #c6ad84 }
+.art-book-front span { font: 11px/1.5 Georgia, serif; letter-spacing: .18em; text-align: center; color: #455e51 }
+.art-book-front i { font-style: normal; font-size: 23px }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin: 51px 0 23px }
+.section-heading h2 { font: 600 23px Georgia, 'Songti SC', serif; margin: 8px 0 0 }
+.count-badge { display: inline-flex; align-items: center; justify-content: center; font: 12px Inter, sans-serif; vertical-align: middle; border-radius: 20px; color: #567560; background: #e9eee8; min-width: 24px; height: 23px; padding: 0 6px; margin-left: 4px }
+.section-hint { font-size: 12px; color: #a0aaa0 }
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(153px, 1fr)); gap: 28px 25px }
+.book-card { border: 0; background: transparent; text-align: left; padding: 0; min-width: 0 }
+.book-card:hover .book-cover { transform: translateY(-6px); box-shadow: 8px 16px 26px #26392d2e }
+.book-cover { height: 218px; width: 100%; border-radius: 5px 10px 10px 5px; box-shadow: 5px 7px 16px #1e312425; display: flex; flex-direction: column; overflow: hidden; position: relative; color: #f5eedb; padding: 22px 16px 15px; transition: transform .25s, box-shadow .25s; border-left: 6px solid #ffffff24 }
+.book-cover::after { content: ''; position: absolute; top: 0; bottom: 0; left: 4px; border-left: 1px solid #ffffff35 }
+.book-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.cover-olive { background: #536456 }.cover-rust { background: #9b684c }.cover-slate { background: #556c78 }.cover-moss { background: #697350 }.cover-ink { background: #444d58 }.cover-clay { background: #99795e }
+.cover-decoration { font: 24px Georgia, serif; color: #e8d7ab; text-align: center; margin: 13px auto 18px }
+.cover-title { font: 600 19px/1.4 Georgia, 'Songti SC', serif; text-align: center; word-break: break-word; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden }
+.cover-author { font-size: 11px; text-align: center; opacity: .8; margin-top: 12px }
+.cover-bottom { margin-top: auto; border-top: 1px solid #ffffff55; padding-top: 10px; text-align: center; font: 9px Georgia, serif; letter-spacing: .22em }
+.card-meta { display: flex; flex-direction: column; gap: 5px; padding-top: 15px; overflow: hidden }
+.card-meta strong, .card-meta span, .card-meta small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.card-meta strong { font-size: 15px; color: #2f3c32 }
+.card-meta span { font-size: 12px; color: #849189 }
+.card-meta small { color: #70947a; font-size: 11px }
+.empty-state { border: 1px dashed #d9e0d6; background: #fff; border-radius: 15px; text-align: center; padding: 56px 16px; color: #8d988d }
+.empty-icon { width: 68px; height: 68px; background: #f1f5ee; color: #4f755b; border-radius: 50%; margin: 0 auto 17px; display: grid; place-items: center }
+.empty-state h3 { color: #324238; font: 20px Georgia, 'Songti SC', serif; margin: 0 0 9px }
+.empty-state p { font-size: 13px; margin: 0 auto 22px; max-width: 440px; line-height: 1.8 }
+.empty-state:not(:has(.button)) p { margin-bottom: 0 }
+.page-footer { border-top: 1px solid #e9ece6; padding: 19px 58px; font: 10px Georgia, serif; letter-spacing: .1em; color: #a9b3a9; display: flex; justify-content: space-between }
+.search-form { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e3e9df; border-radius: 13px; padding: 10px 10px 10px 22px; box-shadow: 0 8px 25px #304a3510; color: #688471 }
+.search-form .textfield { flex: 1; min-width: 0 }
+.search-form .input { background: transparent; border: 0; outline: 0; box-shadow: none; width: 100%; font-size: 14px }
+.search-form .input:focus { outline: 0; box-shadow: none }
+.center-loading { padding: 75px 10px; display: flex; align-items: center; justify-content: center; gap: 13px; color: #708577; font-size: 14px }
+.notice { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 17px 20px; border-radius: 10px; background: #fff4ed; color: #995f3d; font-size: 13px }
+.back-link { margin: 0 0 26px -10px }
+.detail-hero { display: flex; gap: 47px; align-items: flex-start; background: #fff; border: 1px solid #edf0ea; border-radius: 16px; padding: 43px }
+.book-cover-large { flex: 0 0 218px; height: 300px; padding: 35px 22px 20px }
+.book-cover-large .cover-title { font-size: 26px }
+.detail-info { min-width: 0; flex: 1 }
+.detail-info h1 { margin: 13px 0 12px }
+.detail-author { font-size: 15px; color: #778578 }
+.metadata-divider { color: #bac4b9; margin: 0 9px }
+.detail-tags { display: flex; gap: 9px; flex-wrap: wrap; margin: 21px 0 }
+.detail-tags span { padding: 5px 10px; border-radius: 5px; background: #edf2eb; color: #58715d; font-size: 11px }
+.detail-intro { color: #778578; font-size: 13px; line-height: 1.9; margin: 0 0 24px; max-height: 108px; overflow: auto }
+.detail-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap }
+.catalog-heading { margin-top: 48px }
+.chapter-list { display: grid; background: #fff; border: 1px solid #e9eee8; border-radius: 11px; overflow: hidden }
+.chapter-row { display: flex; align-items: center; gap: 21px; min-height: 59px; text-align: left; padding: 11px 23px; border: 0; border-bottom: 1px solid #eef1ed; background: #fff; color: #374539; font-size: 14px }
+.chapter-row:last-child { border-bottom: 0 }
+.chapter-row:hover { background: #f5f8f3 }
+.chapter-number { color: #a6b4a6; font: 13px Georgia, serif }
+.chapter-name { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis }
+.chapter-current { color: #69866b; font-size: 11px; white-space: nowrap }
+.chapter-row > svg { color: #a2aea2 }
+.reading-shell { display: block; background: #f5f0e5; color: #3e3c34; min-height: 100vh }
+.theme-night { background: #202622; color: #d5d8cc }
+.reader-view { height: 100vh; overflow-y: auto; position: relative; scroll-behavior: smooth }
+.reader-toolbar { height: 68px; position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 0 max(30px, calc((100vw - 970px)/2)); border-bottom: 1px solid #d9d1c366; background: #f5f0e5ee; backdrop-filter: blur(16px) }
+.theme-night .reader-toolbar { background: #202622ec; border-color: #ffffff18 }
+.reader-book-name { font: 14px Georgia, 'Songti SC', serif; opacity: .65; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 40% }
+.toolbar-actions { display: flex; gap: 5px }
+.reader-page { max-width: 760px; padding: 84px 30px 110px; margin: 0 auto; min-height: calc(100vh - 130px) }
+.reader-overline { color: #9b8770; letter-spacing: .1em; font-size: 11px }
+.reader-overline span { margin: 0 9px; opacity: .5 }
+.reader-page h1 { font: 600 clamp(26px, 4vw, 38px)/1.4 Georgia, 'Songti SC', serif; margin: 22px 0 22px }
+.chapter-ornament { color: #b6946a; font: 21px Georgia, serif; margin: 0 0 50px }
+.chapter-body { font-family: Georgia, 'Songti SC', 'Noto Serif CJK SC', serif; line-height: 2.15; letter-spacing: .045em; white-space: pre-wrap; overflow-wrap: anywhere }
+.chapter-body p { text-indent: 2em; margin: 0 0 1.4em }
+.empty-reading { color: #918d80; padding: 40px 0 }
+.chapter-navigation { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #a39b8433; margin-top: 75px; padding-top: 31px; gap: 12px }
+.chapter-navigation span { opacity: .55; font-size: 12px }
+.reader-footer { text-align: center; color: #aaa494; font-size: 11px; padding: 10px 0 35px }
+.theme-night .reader-footer { color: #778078 }
+.reader-panel { position: fixed; top: 78px; right: max(20px, calc((100vw - 970px)/2)); width: min(360px, calc(100vw - 40px)); background: #fffcf5; color: #354137; border: 1px solid #dedbd0; border-radius: 13px; box-shadow: 0 18px 60px #131c1740; padding: 18px; z-index: 20 }
+.theme-night .reader-panel { background: #333c35; color: #e6e7db; border-color: #48564a }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px }
+.panel-scroll { max-height: min(65vh, 600px); overflow: auto }
+.panel-chapter { display: flex; align-items: center; gap: 13px; width: 100%; padding: 12px 8px; border: 0; background: transparent; color: inherit; text-align: left; border-bottom: 1px solid #929b8e30; font-size: 13px }
+.panel-chapter span { color: #879c84; font: 12px Georgia, serif }
+.panel-chapter:hover, .panel-chapter.current { color: #6ba477; background: #81907a18 }
+.settings-panel > p { font-size: 12px; opacity: .7; margin: 18px 0 10px }
+.settings-row { display: flex; align-items: center; gap: 10px }
+.settings-row > span { width: 56px; text-align: center; font-size: 13px }
+.nav-backdrop { display: none }
+@media (max-width: 1000px) { .sidebar { width: 210px; flex-basis: 210px } .page-content { padding: 42px 35px 75px } .topbar { padding: 0 35px } .feature-art { right: 1% } .feature-copy { width: 68% } .feature-banner { padding-left: 30px } }
+@media (max-width: 720px) { .sidebar { position: fixed; left: 0; top: 0; transform: translateX(-100%); transition: transform .25s; width: 252px } .sidebar-open { transform: translateX(0) } .nav-backdrop { display: block; position: fixed; inset: 0; background: #07150ca1; border: 0; z-index: 25 } .menu-button { display: inline-flex !important; margin-left: -10px } .topbar { height: 62px; padding: 0 20px; gap: 10px } .breadcrumbs { margin-right: auto } .topbar-date { display: none } .page-content { padding: 33px 21px 65px } .page-heading { align-items: start; flex-direction: column; gap: 18px } .page-heading h1 { font-size: 36px } .feature-banner { height: auto; min-height: 272px; padding: 30px 25px; } .feature-copy { width: 100% } .feature-copy h2 { font-size: 25px } .feature-copy p { max-width: 70% } .feature-art { opacity: .35; right: -95px } .section-heading { margin-top: 40px } .section-hint { display: none } .book-grid { grid-template-columns: repeat(auto-fill, minmax(137px, 1fr)); gap: 22px 17px } .book-cover { height: 194px } .page-footer { padding: 17px 21px } .detail-hero { padding: 25px; gap: 25px } .book-cover-large { flex-basis: 150px; height: 220px } .detail-info h1 { font-size: 30px } .reader-toolbar { padding: 0 14px } .reader-page { padding: 54px 24px 80px } }
+@media (max-width: 510px) { .detail-hero { flex-direction: column } .book-cover-large { width: 160px; flex: auto; height: 230px } .search-form { gap: 8px; padding: 7px 7px 7px 13px } .search-form > svg { width: 17px; flex-shrink: 0 } .search-form .button { padding: 0 9px; font-size: 12px } .search-form .button svg { display: none } .search-form .input { font-size: 12px } .feature-copy p { max-width: 100%; white-space: normal; line-height: 1.6 } .feature-copy { padding-right: 30px } .feature-art { opacity: .18 } .chapter-row { padding: 10px 14px; gap: 12px } .reader-book-name { max-width: 30% } .chapter-navigation .button { padding: 0 9px; font-size: 12px } }

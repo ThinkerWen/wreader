@@ -30,4 +30,4 @@ settings.CONFIGURATION_PATH = settings.APP_PATH / "_configurations"
 settings.SOURCE_PATH.mkdir(exist_ok=True)
 
 app.include_router(api_router)
-app.mount("/", StaticFiles(directory=settings.APP_PATH.parent / "web", html=True), name="static")
+app.mount("/", StaticFiles(directory=settings.APP_PATH.parent / "web" / "dist", html=True), name="static")
