@@ -21,6 +21,7 @@ def js_interceptor(func):
         except Exception as e:
             return str(e)
         return result
+
     return wrapper
 
 

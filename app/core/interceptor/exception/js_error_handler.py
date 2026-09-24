@@ -5,6 +5,4 @@ class JSError(Exception):
     pass
 
 
-js_error_handler = error_handler_factory({
-    JSError: handle_js_error
-})
+js_error_handler = error_handler_factory({JSError: handle_js_error})

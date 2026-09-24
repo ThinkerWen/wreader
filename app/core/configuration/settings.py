@@ -1,14 +1,12 @@
-from typing import Optional
-
-from pydantic.v1 import BaseSettings
+from pathlib import Path
 
 
-class Settings(BaseSettings):
-
-    APP_PATH: str = ""
-    SOURCE_PATH: str = ""
-    CONFIGURATION_PATH: str = ""
-    SOURCE_CONFIG: Optional[dict] = dict()
+class Settings:
+    APP_PATH: Path = Path()
+    SOURCE_PATH: Path = Path()
+    CONFIGURATION_PATH: Path = Path()
+    SOURCE_CONFIG: dict = {}
+    ALL_SOURCES: dict = {}
 
 
 settings = Settings()

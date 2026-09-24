@@ -3,7 +3,8 @@ from urllib.parse import urljoin
 from lxml import etree
 
 from app.core.entity.novel import Novel
-from app.core.net import SingletonClient
+from app.core.net import fetch_page
+from app.core.net.safety import validate_url
 from app.core.parser import ParserFactory
 from app.core.util.net_tool import get_request_params
 from app.core.util.source_tool import get_sources
@@ -37,13 +38,12 @@ async def search_novel(keyword: str, source_ids: list[str]) -> list[Novel]:
     sources = await get_sources(source_ids)
     for source_id in sources:
         source = sources[source_id]
-        client = await SingletonClient.get_instance()
-        async with client.request(**get_request_params(source, "search", keyword=keyword)) as response:
-            text = await response.text()
-            for book in parse_novel_list(text, source.get("ruleSearch")):
-                novel_list.append(Novel(
+        text = await fetch_page(source_id, get_request_params(source, "search", keyword=keyword))
+        for book in parse_novel_list(text, source.get("ruleSearch")):
+            novel_list.append(
+                Novel(
                     name=book.get("bookName"),
-                    url=urljoin(source.get("ruleSearch").get("url"), book.get("bookUrl")),
+                    url=validate_url(source_id, urljoin(source.get("ruleSearch").get("url"), book.get("bookUrl"))),
                     source_id=source_id,
                     author=book.get("bookAuthor"),
                     cover_url=book.get("coverUrl"),
@@ -52,7 +52,7 @@ async def search_novel(keyword: str, source_ids: list[str]) -> list[Novel]:
                     introduce=book.get("introduce"),
                     last_chapter_name=book.get("lastChapterName"),
                     last_update_time=book.get("lastUpdateTime"),
-                    status=book.get("status")
-                ))
-    await SingletonClient.close_client()
+                    status=book.get("status"),
+                )
+            )
     return novel_list

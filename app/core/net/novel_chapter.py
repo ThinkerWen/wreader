@@ -1,11 +1,11 @@
-from typing import Union
 from urllib.parse import urljoin
 
 from lxml import etree
 
 from app.core.entity.chapter import Chapter
 from app.core.entity.novel import Novel
-from app.core.net import SingletonClient
+from app.core.net import fetch_page
+from app.core.net.safety import validate_url
 from app.core.parser import ParserFactory
 from app.core.util.net_tool import get_request_params
 from app.core.util.source_tool import get_source
@@ -13,26 +13,22 @@ from app.core.util.source_tool import get_source
 
 def parse_chapter(text: str, source: dict) -> list[Chapter]:
     if not text or not source:
-        return list()
-    result = list()
+        return []
     doc = etree.HTML(text)
     parser = ParserFactory.get_parser("xpath")
-    for chapter_doc in parser.chapter_list(doc, source.get("chapterList")):
-        result.append(Chapter(
-            name=parser.chapter_name(chapter_doc, source.get("chapterName")),
-            url=parser.chapter_url(chapter_doc, source.get("chapterUrl"))
-        ))
-
-    return result
+    return [
+        Chapter(name=parser.chapter_name(item, source.get("chapterName")), url=parser.chapter_url(item, source.get("chapterUrl")))
+        for item in parser.chapter_list(doc, source.get("chapterList"))
+    ]
 
 
 def parse_extra(text: str, source: dict) -> dict:
     if not text or not source:
-        return dict()
-    book = dict()
+        return {}
+    book = {}
     doc = etree.HTML(text)
     parser = ParserFactory.get_parser("xpath")
-    extra = source.get("ruleExtra")
+    extra = source.get("ruleExtra") or {}
     book["bookSize"] = parser.book_size(doc, extra.get("bookSize"))
     book["classify"] = parser.classify(doc, extra.get("classify"))
     book["coverUrl"] = parser.cover_url(doc, extra.get("coverUrl"))
@@ -43,34 +39,29 @@ def parse_extra(text: str, source: dict) -> dict:
     return book
 
 
-def parse_next_url(text, source) -> str:
-    doc = etree.HTML(text)
-    parser = ParserFactory.get_parser("xpath")
-    return parser.next_page(doc, source.get("next"))
+def parse_next_url(text: str, source: dict) -> str:
+    if not text or not source or not source.get("next"):
+        return ""
+    return ParserFactory.get_parser("xpath").next_page(etree.HTML(text), source["next"])
 
 
-async def fetch_chapter(novel: Novel, page: Union[str | None] = None) -> dict:
-    chapter_list = list()
-    client = await SingletonClient.get_instance()
+async def fetch_chapter(novel: Novel, page: str | None = None) -> dict:
+    validate_url(novel.source_id, novel.url)
     source = await get_source(novel.source_id)
-    url = page if page else novel.url
-    async with client.request(**get_request_params(source, "chapter", url=url)) as response:
-        text = await response.text()
-        for chapter in parse_chapter(text, source.get("ruleChapter")):
-            if not chapter.url: continue
-            chapter.url = urljoin(novel.url, chapter.url)
-            chapter_list.append(chapter)
-        extra = parse_extra(text, source.get("ruleChapter"))
-        novel.size = extra.get("bookSize")
-        novel.classify = extra.get("classify")
-        novel.cover_url = extra.get("coverUrl")
-        novel.introduce = extra.get("introduce")
-        novel.last_chapter_name = extra.get("lastChapterName")
-        novel.last_update_time = extra.get("lastUpdateTime")
-        novel.status = extra.get("status")
-    await SingletonClient.close_client()
+    url = page or novel.url
+    text = await fetch_page(novel.source_id, get_request_params(source, "chapter", url=url))
+    chapters = []
+    for chapter in parse_chapter(text, source.get("ruleChapter")):
+        if chapter.url:
+            chapter.url = validate_url(novel.source_id, urljoin(url, chapter.url))
+            chapters.append(chapter)
+    extra = parse_extra(text, source.get("ruleChapter"))
+    novel.size = extra.get("bookSize")
+    novel.classify = extra.get("classify")
+    novel.cover_url = extra.get("coverUrl")
+    novel.introduce = extra.get("introduce")
+    novel.last_chapter_name = extra.get("lastChapterName")
+    novel.last_update_time = extra.get("lastUpdateTime")
+    novel.status = extra.get("status")
     next_page = parse_next_url(text, source.get("ruleChapter"))
-    return {
-        "chapter_list": chapter_list,
-        "next_page": urljoin(chapter.url, next_page) if next_page else str(),
-    }
+    return {"chapter_list": chapters, "next_page": validate_url(novel.source_id, urljoin(url, next_page)) if next_page else ""}

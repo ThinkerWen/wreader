@@ -19,5 +19,7 @@ class SourceSummary(BaseModel):
             super().__setattr__(name, value)
 
     def __repr__(self):
-        return (f"SourceSummary(书源id={self.source_id}, 书源名={self.source_name}, 优先级={self.priority}, "
-                f"书源作者={self.source_author}, 书源主页={self.source_index})")
+        return (
+            f"SourceSummary(书源id={self.source_id}, 书源名={self.source_name}, 优先级={self.priority}, "
+            f"书源作者={self.source_author}, 书源主页={self.source_index})"
+        )

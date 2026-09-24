@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -6,28 +7,35 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.api.main import api_router
+from app.config.auth import load_credentials, secret
+from app.config.data import prepare_data
 from app.config.loader import load_config
-from app.core.configuration.settings import settings
+from app.core.net import SingletonClient
+from app.service.library import initialize
 
 
 @asynccontextmanager
 async def lifespan(fast_app: FastAPI):
+    secret()
+    prepare_data()
+    load_credentials()
     await load_config()
-    yield
+    initialize()
+    try:
+        yield
+    finally:
+        await SingletonClient.close_client()
 
 
 app = FastAPI(title="WReader", lifespan=lifespan)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-settings.APP_PATH = Path(__file__).resolve().parent
-settings.SOURCE_PATH = settings.APP_PATH / "_sources"
-settings.CONFIGURATION_PATH = settings.APP_PATH / "_configurations"
-settings.SOURCE_PATH.mkdir(exist_ok=True)
-
+if origin := os.getenv("WREADER_CORS_ORIGIN"):
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[origin],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_headers=["Authorization", "Content-Type"],
+    )
 app.include_router(api_router)
-app.mount("/", StaticFiles(directory=settings.APP_PATH.parent / "web" / "dist", html=True), name="static")
+static = Path(__file__).resolve().parent.parent / "web" / "dist"
+if static.is_dir():
+    app.mount("/", StaticFiles(directory=static, html=True), name="static")

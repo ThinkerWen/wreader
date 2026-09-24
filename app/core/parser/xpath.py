@@ -6,7 +6,6 @@ from app.core.parser.parser import IParser
 
 
 class XPathParser(IParser):
-
     @js_interceptor
     @xpath_error_handler
     def book_size(self, node: Element, exp: str) -> str:

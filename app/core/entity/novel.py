@@ -26,6 +26,8 @@ class Novel(BaseModel):
             super().__setattr__(name, value)
 
     def __repr__(self):
-        return (f"Novel(书名：{self.name}, 封面：{self.cover_url}, 地址：{self.url}, "
-                f"大小：{self.size}, 作者：{self.author}, 连载状态：{self.status}, 书籍分类：{self.classify}, "
-                f"介绍：{self.introduce}, 最新更新时间：{self.last_update_time}, 最新章节名：{self.last_chapter_name})")
+        return (
+            f"Novel(书名：{self.name}, 封面：{self.cover_url}, 地址：{self.url}, "
+            f"大小：{self.size}, 作者：{self.author}, 连载状态：{self.status}, 书籍分类：{self.classify}, "
+            f"介绍：{self.introduce}, 最新更新时间：{self.last_update_time}, 最新章节名：{self.last_chapter_name})"
+        )

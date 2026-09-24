@@ -3,7 +3,6 @@ from typing import Any
 
 
 class IParser(metaclass=ABCMeta):
-
     # Book Extra rules
     @abstractmethod
     def book_size(self, node: Any, exp: str) -> str:

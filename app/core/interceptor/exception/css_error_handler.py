@@ -5,6 +5,4 @@ class CSSError(Exception):
     pass
 
 
-css_error_handler = error_handler_factory({
-    CSSError: handle_css_error
-})
+css_error_handler = error_handler_factory({CSSError: handle_css_error})

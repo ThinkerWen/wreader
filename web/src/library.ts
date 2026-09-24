@@ -1,4 +1,5 @@
 export interface Novel {
+  book_id?: number
   name: string
   url: string
   source_id?: string | null
@@ -11,43 +12,49 @@ export interface Novel {
   last_update_time?: string | null
   last_chapter_name?: string | null
 }
-
 export interface Chapter { name: string; url: string }
 export interface Progress { chapterUrl: string; chapterName: string; index: number; updatedAt: number }
 export type ProgressMap = Record<string, Progress>
-
+export interface ServerProgress { chapter_url: string; chapter_name: string; chapter_index: number; updated_at: number }
+export interface ServerBook extends Novel { book_id: number; progress: ServerProgress | null }
 export const bookKey = (book: Novel) => `${book.source_id ?? ''}::${book.url}`
-const storageKey = 'wreader-library-v1'
-const progressKey = 'wreader-progress-v1'
+export const toProgress = (item: ServerProgress): Progress => ({ chapterUrl: item.chapter_url, chapterName: item.chapter_name, index: item.chapter_index, updatedAt: item.updated_at })
 
-function stored<T>(key: string, fallback: T): T {
-  try { return JSON.parse(localStorage.getItem(key) || '') as T } catch { return fallback }
+// Legacy browser data stays untouched for recovery and retry.
+export function legacyData(): { books: Novel[]; progress: ProgressMap; skipped: number } | null {
+  const rawBooks = localStorage.getItem('wreader-library-v1')
+  const rawProgress = localStorage.getItem('wreader-progress-v1')
+  if (rawBooks === null && rawProgress === null) return null
+  let books: unknown, progress: unknown
+  try { books = rawBooks === null ? [] : JSON.parse(rawBooks); progress = rawProgress === null ? {} : JSON.parse(rawProgress) } catch { throw new Error('旧书架数据格式错误，请先备份浏览器数据') }
+  if (!Array.isArray(books) || !progress || typeof progress !== 'object' || Array.isArray(progress)) throw new Error('旧书架数据格式错误，请先备份浏览器数据')
+  const valid = books.filter((item): item is Novel => !!item && typeof item === 'object' && typeof item.name === 'string' && typeof item.url === 'string' && typeof item.source_id === 'string' && item.source_id.length === 32 && item.name.length > 0 && item.url.length > 0)
+  return { books: valid, progress: progress as ProgressMap, skipped: books.length - valid.length }
 }
 
-export function loadBooks(): Novel[] {
-  const value = stored<unknown>(storageKey, [])
-  return Array.isArray(value) ? value.filter((item): item is Novel => !!item && typeof item.name === 'string' && typeof item.url === 'string') : []
-}
-export function loadProgress(): ProgressMap {
-  const value = stored<unknown>(progressKey, {})
-  return value && typeof value === 'object' && !Array.isArray(value) ? value as ProgressMap : {}
-}
-export function saveBooks(value: Novel[]) { try { localStorage.setItem(storageKey, JSON.stringify(value)) } catch { /* Storage is optional. */ } }
-export function saveProgress(value: ProgressMap) { try { localStorage.setItem(progressKey, JSON.stringify(value)) } catch { /* Storage is optional. */ } }
-
+let token: string | null = null
+export function setToken(value: string | null) { token = value }
+export class UnauthorizedError extends Error {}
 async function json<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, init)
-  if (!response.ok) throw new Error(`请求失败（${response.status}），请稍后重试`)
-  return response.json() as Promise<T>
+  const response = await fetch(url, { ...init, headers: { ...init?.headers, ...(token ? { Authorization: `Bearer ${token}` } : {}) } })
+  if (response.status === 401 && url !== '/api/auth/login') { setToken(null); window.dispatchEvent(new Event('wreader-unauthorized')); throw new UnauthorizedError('登录已失效，请重新登录') }
+  if (!response.ok) {
+    const body = await response.json().catch(() => null) as { detail?: string } | null
+    throw new Error(typeof body?.detail === 'string' ? body.detail : `请求失败（${response.status}），请稍后重试`)
+  }
+  return response.status === 204 ? undefined as T : response.json() as Promise<T>
 }
-export function searchBooks(keyword: string): Promise<Novel[]> {
-  return json(`/novel/search?${new URLSearchParams({ keyword })}`)
+export async function login(password: string): Promise<void> {
+  const result = await json<{ access_token: string }>('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
+  setToken(result.access_token)
 }
-async function post<T>(path: string, body: object): Promise<T> {
-  return json(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
-}
+export const getLibrary = () => json<{ books: ServerBook[] }>('/api/library')
+export const addToLibrary = (book: Novel) => json<ServerBook>('/api/library/books', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(book) })
+export const removeFromLibrary = (id: number) => json<void>(`/api/library/books/${id}`, { method: 'DELETE' })
+export const putProgress = (id: number, chapter: Chapter, index: number, migrated?: number) => json<ServerProgress>(`/api/library/books/${id}/progress`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chapter_url: chapter.url, chapter_name: chapter.name, chapter_index: index, ...(migrated === undefined ? {} : { migrated_updated_at: migrated }) }) })
+export function searchBooks(keyword: string): Promise<Novel[]> { return json(`/novel/search?${new URLSearchParams({ keyword })}`) }
+async function post<T>(path: string, body: object): Promise<T> { return json(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }) }
 
-// Sources paginate with URLs; guard against cycles and overly long catalogs.
 export async function getChapters(book: Novel): Promise<Chapter[]> {
   const chapters: Chapter[] = []
   const seenPages = new Set<string>()

@@ -1,60 +1,74 @@
 import asyncio
 import json
-import os.path
-from typing import Dict, Optional
+import os
+import re
+from pathlib import Path
 from uuid import uuid4
 
-import aiofiles
 import yaml
 
 from app.core.configuration.settings import settings
 from app.core.entity.source_summary import SourceSummary
 
+SOURCE_ID = re.compile(r"[a-f0-9]{32}\Z")
 
-async def load_source_config() -> Dict[str, SourceSummary]:
-    source_config = dict()
-    async with aiofiles.open(os.path.join(settings.CONFIGURATION_PATH, "source_config.yaml"), 'r', encoding="utf-8") as file:
-        yaml_str = await file.read()
-        source_config_dict = yaml.safe_load(yaml_str)
-        def sort_by_priority(x): return source_config_dict[x].get("priority", 0)
 
-        for source_id in sorted(source_config_dict, key=sort_by_priority, reverse=True):
-            config = source_config_dict[source_id]
-            if config.get("enable", True):
-                source_config[source_id] = SourceSummary(**config)
-        return source_config
+def source_path(source_id: str) -> Path:
+    if not SOURCE_ID.fullmatch(source_id):
+        raise ValueError("无效书源 ID")
+    return settings.SOURCE_PATH / f"{source_id}.json"
+
+
+async def load_source_config() -> dict[str, SourceSummary]:
+    path = settings.CONFIGURATION_PATH / "source_config.yaml"
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not isinstance(raw, dict) or not raw:
+        raise ValueError("书源配置必须是非空映射")
+    result = {}
+    for source_id, config in raw.items():
+        if (
+            not isinstance(source_id, str)
+            or not SOURCE_ID.fullmatch(source_id)
+            or not isinstance(config, dict)
+            or config.get("source_id") != source_id
+        ):
+            raise ValueError(f"书源配置 ID 不匹配: {source_id}")
+        summary = SourceSummary.model_validate(config)
+        if not isinstance(config.get("enable"), bool):
+            raise ValueError(f"书源启用状态无效: {source_id}")
+        source = json.loads(source_path(source_id).read_text(encoding="utf-8"))
+        if not isinstance(source, dict) or not source:
+            raise ValueError(f"书源 JSON 无效: {source_id}")
+        result[source_id] = summary
+    return dict(sorted(result.items(), key=lambda item: item[1].priority or 0, reverse=True))
 
 
 async def save_source_config(source: SourceSummary) -> None:
-    source_config = await load_source_config()
-    source_config[source.source_id] = source
-    async with aiofiles.open(os.path.join(settings.CONFIGURATION_PATH, "source_config.yaml"), 'w', encoding="utf-8") as file:
-        await file.write(yaml.dump(source_config))
+    await load_source_config()
+    path = settings.CONFIGURATION_PATH / "source_config.yaml"
+    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    raw[source.source_id] = source.model_dump()
+    temporary = path.with_suffix(".tmp")
+    temporary.write_text(yaml.safe_dump(raw, allow_unicode=True), encoding="utf-8")
+    os.replace(temporary, path)
 
 
 async def get_source(source_id: str) -> dict:
-    try:
-        async with aiofiles.open(os.path.join(settings.SOURCE_PATH, f"{source_id}.json"), 'r', encoding="utf-8") as f:
-            content = await f.read()
-            return json.loads(content)
-    except FileNotFoundError:
-        return dict()
+    if source_id not in settings.SOURCE_CONFIG:
+        raise ValueError("书源不存在或已禁用")
+    source = json.loads(source_path(source_id).read_text(encoding="utf-8"))
+    if not isinstance(source, dict) or not source:
+        raise ValueError("书源 JSON 无效")
+    return source
 
 
-async def save_source(source: dict, source_id: Optional[str]) -> None:
-    if not source_id:
-        source_id = str(uuid4()).replace("-", "")
-    async with aiofiles.open(os.path.join(settings.SOURCE_PATH, f"{source_id}.json"), 'w', encoding="utf-8") as f:
-        await f.write(json.dumps(source))
+async def save_source(source: dict, source_id: str | None) -> None:
+    source_id = source_id or uuid4().hex
+    path = source_path(source_id)
+    temporary = path.with_suffix(".tmp")
+    temporary.write_text(json.dumps(source, ensure_ascii=False), encoding="utf-8")
+    os.replace(temporary, path)
 
 
-async def get_sources(source_ids: list) -> dict[str, dict]:
-    sources = dict()
-    tasks = [asyncio.create_task(get_source(source_id)) for source_id in source_ids]
-
-    results = await asyncio.gather(*tasks)
-
-    for source_id, result in zip(source_ids, results):
-        sources[source_id] = result
-
-    return sources
+async def get_sources(source_ids: list[str]) -> dict[str, dict]:
+    return dict(zip(source_ids, await asyncio.gather(*(get_source(source_id) for source_id in source_ids)), strict=True))

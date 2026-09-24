@@ -18,6 +18,8 @@ class Source(BaseModel):
     update: Optional[str] = None
 
     def __repr__(self):
-        return (f"Source(站点名称：{self.siteName}, 主页：{self.host}, 版本：{self.version}, "
-                f"作者：{self.author}, 联系方式：{self.contact}, 源URL：{self.sourceUrl}, "
-                f"备注：{self.remarks}, 源更新地址：{self.update})")
+        return (
+            f"Source(站点名称：{self.siteName}, 主页：{self.host}, 版本：{self.version}, "
+            f"作者：{self.author}, 联系方式：{self.contact}, 源URL：{self.sourceUrl}, "
+            f"备注：{self.remarks}, 源更新地址：{self.update})"
+        )
