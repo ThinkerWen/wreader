@@ -11,14 +11,15 @@
 ```bash
 git clone https://github.com/ThinkerWen/wreader.git
 cd wreader
-pip install -r requirements.txt
-uvicorn main:app --host 0.0.0.0 --port 8000
+uv sync --python 3.12
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
-浏览器打开 `http://127.0.0.1:8000`即可搜索阅读小说
+浏览器打开 `http://127.0.0.1:8000` 即可搜索阅读小说。后端代码与配置在 `app/`，`web/` 是前端构建后的静态文件；前端源码见下方链接。依赖由 `pyproject.toml` 与 `uv.lock` 管理。
 <br>
-### 二、Docker（未启用）
+### 二、Docker
 ```bash
-docker run -d --name wreader -p 8001:8001 ThinkerWen/wreader
+docker build -t wreader .
+docker run -d --name wreader -p 8000:8000 wreader
 ```
 浏览器打开 `http://127.0.0.1:8000`即可搜索阅读小说
 

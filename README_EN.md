@@ -11,14 +11,15 @@ Automatically capture web page data, the rules are simple and easy to understand
 ```bash
 git clone https://github.com/ThinkerWen/wreader.git
 cd wreader
-pip install -r requirements.txt
-uvicorn main:app --host 0.0.0.0 --port 8000
+uv sync --python 3.12
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
-Open `http://127.0.0.1:8000` in your browser to search and read novels
+Open `http://127.0.0.1:8000` in your browser to search and read novels. Backend code and configuration live in `app/`; `web/` contains built frontend assets (see the frontend source link below). Dependencies are managed with `pyproject.toml` and `uv.lock`.
 <br>
-### 2. Docker（Not enabled yet）
+### 2. Docker
 ```bash
-docker run -d --name wreader -p 8001:8001 ThinkerWen/wreader
+docker build -t wreader .
+docker run -d --name wreader -p 8000:8000 wreader
 ```
 Open `http://127.0.0.1:8000` in your browser to search and read novels
 
