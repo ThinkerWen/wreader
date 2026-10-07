@@ -1,10 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, Request, Response
 from pydantic import BaseModel, Field
 
-from app.config.auth import login, require_auth
-from app.core.configuration.settings import settings
-from app.core.util.source_tool import SOURCE_ID
 from app.service import library
+from app.service.auth import login, require_auth
 
 router = APIRouter(prefix="/api")
 protected = APIRouter(dependencies=[Depends(require_auth)])
@@ -47,11 +45,6 @@ def get_library():
 
 @protected.post("/library/books")
 def add_book(body: BookInput, response: Response):
-    if not SOURCE_ID.fullmatch(body.source_id) or body.source_id not in settings.SOURCE_CONFIG:
-        raise HTTPException(422, "书源不存在或已禁用")
-    from app.core.net.safety import validate_url
-
-    validate_url(body.source_id, body.url)
     book, created = library.add_book(body.model_dump())
     response.status_code = 201 if created else 200
     return book
@@ -64,20 +57,7 @@ def delete_book(book_id: int):
 
 @protected.put("/library/books/{book_id}/progress")
 def update_progress(book_id: int, body: ProgressInput):
-    from app.core.net.safety import validate_url
-
-    with library.connection() as db:
-        book = library.fetch_book(db, book_id)
-    if not book:
-        raise HTTPException(404, "书籍不存在")
-    if book["source_id"] in settings.SOURCE_CONFIG:
-        validate_url(book["source_id"], body.chapter_url)
-    if body.migrated_updated_at is not None and not (946684800000 <= body.migrated_updated_at <= library.now_ms() + 300000):
-        raise HTTPException(422, "迁移时间戳无效")
-    result = library.set_progress(book_id, body.model_dump())
-    if result is None:
-        raise HTTPException(404, "书籍不存在")
-    return result
+    return library.set_progress(book_id, body.model_dump())
 
 
 router.include_router(protected)

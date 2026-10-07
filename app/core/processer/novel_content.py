@@ -2,13 +2,13 @@ from urllib.parse import urljoin
 
 from lxml import etree
 
-from app.core.entity.chapter import Chapter
-from app.core.entity.novel import Novel
-from app.core.net import fetch_page
-from app.core.net.safety import validate_url
+from app.core.models.chapter import Chapter
+from app.core.models.novel import Novel
+from app.core.processer.client import fetch_page
+from app.core.processer.safety import validate_url
 from app.core.parser import ParserFactory
-from app.core.util.net_tool import get_request_params
-from app.core.util.source_tool import get_source
+from app.core.utils.net_tool import get_request_params
+from app.core.utils.source_tool import get_source
 
 
 def parse_content(text: str, source: dict) -> str:

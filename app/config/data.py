@@ -3,7 +3,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from app.core.configuration.settings import settings
+from app.config.settings import settings
 
 TEMPLATES = Path(__file__).resolve().parents[1]
 

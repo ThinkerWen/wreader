@@ -1,7 +1,7 @@
 import asyncio
 import json
 
-from app.core.net.novel import search_novel
+from app.core.processer.novel import search_novel
 
 
 def main():

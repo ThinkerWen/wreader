@@ -1,4 +1,4 @@
-from app.core.util.keyword_tool import replace_params
+from app.core.utils.keyword_tool import replace_params
 
 
 def get_request_params(source: dict, process: str, keyword: str = "", url: str = "") -> dict:

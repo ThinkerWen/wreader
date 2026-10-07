@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Body, HTTPException
 
-from app.core.configuration.settings import settings
-from app.core.entity.chapter import Chapter
-from app.core.entity.novel import Novel
-from app.core.net.novel import search_novel
-from app.core.net.novel_chapter import fetch_chapter
-from app.core.net.novel_content import fetch_content
+from app.config.settings import settings
+from app.core.models.chapter import Chapter
+from app.core.models.novel import Novel
+from app.core.processer.novel import search_novel
+from app.core.processer.novel_chapter import fetch_chapter
+from app.core.processer.novel_content import fetch_content
 
 router = APIRouter()
 

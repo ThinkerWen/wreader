@@ -2,12 +2,12 @@ from urllib.parse import urljoin
 
 from lxml import etree
 
-from app.core.entity.novel import Novel
-from app.core.net import fetch_page
-from app.core.net.safety import validate_url
+from app.core.models.novel import Novel
+from app.core.processer.client import fetch_page
+from app.core.processer.safety import validate_url
 from app.core.parser import ParserFactory
-from app.core.util.net_tool import get_request_params
-from app.core.util.source_tool import get_sources
+from app.core.utils.net_tool import get_request_params
+from app.core.utils.source_tool import get_sources
 
 
 def parse_novel_list(text: str, source: dict) -> list[dict]:

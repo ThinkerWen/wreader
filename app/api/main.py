@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from app.api.routes import library, novel
-from app.config.auth import require_auth
+from app.service.auth import require_auth
 
 api_router = APIRouter()
 api_router.include_router(library.router)

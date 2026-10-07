@@ -1,6 +1,6 @@
 from typing import Optional
 
-from app.core.entity.source.rule import Rule
+from app.core.models.source.rule import Rule
 
 
 class RuleSearch(Rule):

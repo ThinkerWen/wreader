@@ -2,7 +2,7 @@ import asyncio
 
 import aiohttp
 
-from app.core.net.safety import SafeResolver, validate_url
+from app.core.processer.safety import SafeResolver, validate_url
 
 
 class SingletonClient:

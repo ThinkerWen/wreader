@@ -5,7 +5,7 @@ from urllib.parse import urlsplit
 
 from fastapi import HTTPException
 
-from app.core.configuration.settings import settings
+from app.config.settings import settings
 
 
 def validate_url(source_id: str, url: str) -> str:

@@ -7,11 +7,11 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.api.main import api_router
-from app.config.auth import load_credentials, secret
 from app.config.data import prepare_data
 from app.config.loader import load_config
-from app.core.net import SingletonClient
-from app.service.library import initialize
+from app.core.processer.client import SingletonClient
+from app.repository.library import initialize
+from app.service.auth import load_credentials, secret
 
 
 @asynccontextmanager

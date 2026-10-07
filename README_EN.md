@@ -14,7 +14,7 @@ cd wreader
 uv sync --python 3.12
 export WREADER_DATA_DIR="$HOME/wreader-data"
 export WREADER_JWT_SECRET="$(openssl rand -hex 32)" # Store securely and reuse after restarts
-uv run python -m app.config.auth init # Set a password of at least 12 characters
+uv run python -m app.service.auth init # Set a password of at least 12 characters
 uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 Open `http://127.0.0.1:8000` to search and read novels. Backend code lives in `app/`, frontend source in `web/`, and built static assets in `web/dist/`. Python dependencies are managed with `pyproject.toml` and `uv.lock`.
@@ -24,13 +24,13 @@ Open `http://127.0.0.1:8000` to search and read novels. Backend code lives in `a
 docker build -t wreader .
 docker volume create wreader-data
 export WREADER_JWT_SECRET="$(openssl rand -hex 32)" # Save securely and reuse on restart
-docker run --rm -it -v wreader-data:/data/wreader wreader python -m app.config.auth init
+docker run --rm -it -v wreader-data:/data/wreader wreader python -m app.service.auth init
 docker run -d --name wreader -p 127.0.0.1:8000:8000 \
   -v wreader-data:/data/wreader -e WREADER_JWT_SECRET wreader
 ```
 Log in at `http://127.0.0.1:8000`. The container runs as UID 10001; ensure this user can write to bind-mounted directories. Reuse the same volume and JWT secret for upgrades.
 
-Generate a long-lived CLI token (shown once) with `docker exec -it wreader python -m app.config.auth rotate-token`; send it as a Bearer authorization header. Rotating invalidates the old token; `docker exec -it wreader python -m app.config.auth revoke-token` revokes it.
+Generate a long-lived CLI token (shown once) with `docker exec -it wreader python -m app.service.auth rotate-token`; send it as a Bearer authorization header. Rotating invalidates the old token; `docker exec -it wreader python -m app.service.auth revoke-token` revokes it.
 
 For public deployments, enforce HTTPS via a reverse proxy, avoid logging authorization headers, and set `WREADER_CORS_ORIGIN` to the frontend origin. Back up `sources/`, `credentials.json`, and a consistent SQLite snapshot: stop the server and copy the whole directory, or use the SQLite backup API. Do not copy only the live WAL-mode database file. Store the JWT secret separately. To restore, stop the server, back up the current directory, restore into an empty directory, verify YAML/JSON sources and SQLite integrity, then restart with the original secret.
 
